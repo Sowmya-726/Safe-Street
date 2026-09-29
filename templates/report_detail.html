@@ -1,0 +1,63 @@
+{% extends "app_base.html" %}
+{% block title %}{{ report.damage_type }} · Safe Street{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">{{ report.damage_type }}</h1>
+    <p class="subtitle">{{ report.location_name }} · Reported {{ report.date_label }}</p>
+  </div>
+  <span class="badge badge-{{ report.status }}">{{ report.status_label }}</span>
+</div>
+<div class="compare">
+  {% if report.image %}
+  <div class="card">
+    <p class="muted">Road image</p>
+    <img src="{{ url_for('media', filename=report.image) }}" alt="Reported road">
+  </div>
+  {% endif %}
+  {% if report.result_image %}
+  <div class="card">
+    <p class="muted">Identified damage</p>
+    <img src="{{ url_for('media', filename=report.result_image) }}" alt="Identified damage">
+  </div>
+  {% endif %}
+</div>
+<div class="card" style="margin-top:1rem;">
+  <p><strong>Problem type:</strong> {{ report.damage_type }}</p>
+  <p><strong>Priority:</strong> {{ report.severity_label }}</p>
+  <p><strong>Location:</strong> {{ report.location_name }}</p>
+  <p><strong>Reported by:</strong> Community User</p>
+  <p><strong>Description:</strong> {{ report.description or 'No additional details were provided.' }}</p>
+  <p><strong>Status:</strong> {{ report.status_label }}</p>
+  <p><strong>Reported:</strong> {{ report.date_label }}</p>
+</div>
+{% if report.latitude and report.longitude %}
+<div class="card" style="margin-top:1rem;">
+  <h2 style="margin-top:0;">Location</h2>
+  <div id="detail-map" class="map"></div>
+</div>
+<script>
+  window.SAFE_STREET_DETAIL = {{ {'lat': report.latitude, 'lng': report.longitude, 'label': report.location_name}|tojson }};
+</script>
+{% endif %}
+<div class="actions">
+  <a class="btn btn-outline" href="{{ url_for('explore') }}">All reports</a>
+  <a class="btn btn-outline" href="{{ url_for('damage_map') }}">View on map</a>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+(function () {
+  const info = window.SAFE_STREET_DETAIL;
+  if (!info || typeof L === "undefined") return;
+  const map = L.map("detail-map").setView([info.lat, info.lng], 15);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap",
+  }).addTo(map);
+  L.marker([info.lat, info.lng]).addTo(map).bindPopup(info.label || "Reported location");
+})();
+</script>
+{% endblock %}

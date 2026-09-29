@@ -1,0 +1,18 @@
+{% extends "app_base.html" %}
+{% block title %}Forgot password · Safe Street{% endblock %}
+{% block content %}
+<div class="auth-wrap auth-inline">
+  <div class="card auth-card">
+    <h1>Forgot password?</h1>
+    <p class="muted">If you can still sign in, use Profile to change your password.</p>
+    <form method="post">
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Continue</button>
+    </form>
+    <p class="hint" style="margin-top:1rem;"><a href="{{ url_for('login') }}">Back to sign in</a></p>
+  </div>
+</div>
+{% endblock %}

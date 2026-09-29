@@ -1,0 +1,33 @@
+{% extends "app_base.html" %}
+{% block title %}Create account · Safe Street{% endblock %}
+{% block content %}
+<div class="auth-wrap auth-inline">
+  <div class="card auth-card">
+    <div class="kicker">SAFE STREET</div>
+    <h1>Create account</h1>
+    <p class="muted">Create an account to submit road-damage reports. You can still explore public reports without signing in.</p>
+    <form method="post" action="{{ url_for('register_post') }}">
+      <input type="hidden" name="next" value="{{ next or '' }}">
+      <div class="form-field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" required value="{{ name or '' }}">
+      </div>
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required value="{{ email or '' }}">
+      </div>
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required minlength="8">
+        <span class="hint">At least 8 characters.</span>
+      </div>
+      <div class="form-field">
+        <label for="confirm_password">Confirm password</label>
+        <input id="confirm_password" name="confirm_password" type="password" required>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    </form>
+    <p class="hint" style="margin-top:1rem;">Already have an account? <a href="{{ url_for('login', next=next) }}">Sign in</a> · <a href="{{ url_for('admin_login') }}">Admin Login</a></p>
+  </div>
+</div>
+{% endblock %}

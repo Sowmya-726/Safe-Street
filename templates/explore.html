@@ -1,0 +1,72 @@
+{% extends "app_base.html" %}
+{% block title %}Explore reports · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">All Public Reports</h1>
+    <p class="subtitle">{{ reports|length }} of {{ total }} community reports match your search.</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Report Road Damage</a>
+</div>
+
+<form class="card filter-bar" method="get">
+  <div class="grid-2">
+    <div class="form-field">
+      <label for="q">Search</label>
+      <input id="q" name="q" value="{{ filters.q }}" placeholder="Search by place or problem">
+    </div>
+    <div class="form-field">
+      <label for="location">Location</label>
+      <input id="location" name="location" value="{{ filters.location }}" placeholder="Filter by area">
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="form-field">
+      <label>Priority</label>
+      <select name="severity">
+        <option value="">All</option>
+        {% for s in ['high','medium','low'] %}
+        <option value="{{ s }}" {% if filters.severity == s %}selected{% endif %}>{{ severity_label(s) }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Status</label>
+      <select name="status">
+        <option value="">All</option>
+        <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Submitted</option>
+        <option value="under_review" {% if filters.status == 'under_review' %}selected{% endif %}>Under Review</option>
+        <option value="resolved" {% if filters.status == 'resolved' %}selected{% endif %}>Resolved</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Problem type</label>
+      <select name="damage_type">
+        <option value="">All</option>
+        {% for t in types %}
+        <option value="{{ t }}" {% if filters.damage_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="form-field">
+    <label>Date</label>
+    <input type="date" name="date" value="{{ filters.date }}">
+  </div>
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+{% if reports %}
+<div class="report-grid">
+  {% for row in reports %}
+    {% include "partials/report_card.html" %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="card empty">
+  <h3>No matching reports</h3>
+  <p>Try a different search, or explore the map to see reported roads nearby.</p>
+  <a class="btn btn-outline" href="{{ url_for('damage_map') }}">Open map</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "app_base.html" %}
+{% block title %}Road statistics · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Road damage statistics</h1>
+    <p class="subtitle">A community-wide view of reported road problems.</p>
+  </div>
+</div>
+<div class="metric-grid" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="metric"><span>Total reports</span><strong>{{ stats.total }}</strong></div>
+  <div class="metric"><span>High priority</span><strong>{{ stats.high }}</strong></div>
+  <div class="metric"><span>Resolved</span><strong>{{ stats.resolved }}</strong></div>
+  <div class="metric"><span>Medium priority</span><strong>{{ stats.medium }}</strong></div>
+  <div class="metric"><span>Low priority</span><strong>{{ stats.low }}</strong></div>
+  <div class="metric"><span>Reported today</span><strong>{{ stats.reported_today }}</strong></div>
+</div>
+{% if count == 0 %}
+<div class="card empty">No report data yet. When reports are submitted, they will appear here.</div>
+{% else %}
+<div class="grid-2">
+  <div class="card"><canvas id="chart-types"></canvas></div>
+  <div class="card"><canvas id="chart-severity"></canvas></div>
+  <div class="card"><canvas id="chart-status"></canvas></div>
+  <div class="card"><canvas id="chart-time"></canvas></div>
+</div>
+<script>
+  window.SAFE_STREET_STATS = {{ stats|tojson }};
+</script>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

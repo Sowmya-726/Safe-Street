@@ -1,0 +1,40 @@
+{% extends "app_base.html" %}
+{% block title %}Admin dashboard · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Administrator dashboard</h1>
+    <p class="subtitle">Official report management. Community verification is evidence only.</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-outline" href="{{ url_for('admin_reports') }}">All reports</a>
+    <a class="btn btn-outline" href="{{ url_for('admin_analytics') }}">Analytics</a>
+    <a class="btn btn-danger" href="{{ url_for('admin_logout') }}">Admin logout</a>
+  </div>
+</div>
+<div class="metric-grid metric-grid-5">
+  <div class="metric"><span>Total reports</span><strong>{{ stats.total }}</strong></div>
+  <div class="metric"><span>Pending review</span><strong>{{ stats.pending }}</strong></div>
+  <div class="metric"><span>High priority</span><strong>{{ stats.high }}</strong></div>
+  <div class="metric"><span>Under review</span><strong>{{ stats.review_only }}</strong></div>
+  <div class="metric"><span>Verified</span><strong>{{ stats.verified }}</strong></div>
+</div>
+<div class="grid-2">
+  <div class="card">
+    <h2 style="margin-top:0;">High-priority issues</h2>
+    {% for row in high %}
+    <p><a href="{{ url_for('admin_report_detail', report_id=row.public_id) }}">{{ row.public_id }}</a> · {{ row.damage_type }} · {{ row.location_name }}</p>
+    {% else %}
+    <p class="muted">No high-priority reports.</p>
+    {% endfor %}
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0;">Potential hazards</h2>
+    {% for row in hazards %}
+    <p><a href="{{ url_for('admin_report_detail', report_id=row.public_id) }}">{{ row.public_id }}</a> · {{ row.hazard.message }}</p>
+    {% else %}
+    <p class="muted">No hazard flags from current rules.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

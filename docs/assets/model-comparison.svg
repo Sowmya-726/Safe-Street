@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Model Comparison</title>
+  <desc id="desc">Side-by-side summary of the two model assets included in the repository.</desc>
+  <rect width="1200" height="620" rx="30" fill="#0f172a"/>
+  <text x="60" y="86" fill="#f8fafc" font-size="34" font-family="Segoe UI, Arial, sans-serif">Included Models</text>
+  <text x="60" y="122" fill="#94a3b8" font-size="18" font-family="Segoe UI, Arial, sans-serif">Two packaged YOLO weights for local experimentation and comparative analysis</text>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="60" y="170" width="500" height="380" rx="26" fill="#111827" stroke="#22c55e" stroke-width="3"/>
+    <text x="92" y="226" fill="#dcfce7" font-size="28">Model 1</text>
+    <text x="92" y="264" fill="#f8fafc" font-size="22">Custom YOLOv8m</text>
+    <text x="92" y="312" fill="#cbd5e1" font-size="19">Weights: models/m1-best.pt</text>
+    <text x="92" y="348" fill="#cbd5e1" font-size="19">Size: 52.0 MB</text>
+    <text x="92" y="384" fill="#cbd5e1" font-size="19">Focus: balanced road-scene anomaly detection</text>
+    <text x="92" y="420" fill="#cbd5e1" font-size="19">Classes: vehicle, pedestrian, crack, pothole, speed-bump</text>
+    <text x="92" y="456" fill="#cbd5e1" font-size="19">Best test summary: P 0.736, R 0.740, mAP50 0.745</text>
+    <rect x="92" y="492" width="280" height="14" rx="7" fill="#1f2937"/>
+    <rect x="92" y="492" width="224" height="14" rx="7" fill="#22c55e"/>
+    <text x="92" y="530" fill="#86efac" font-size="18">Primary default in the app</text>
+    <rect x="640" y="170" width="500" height="380" rx="26" fill="#111827" stroke="#38bdf8" stroke-width="3"/>
+    <text x="672" y="226" fill="#dbeafe" font-size="28">Model 2</text>
+    <text x="672" y="264" fill="#f8fafc" font-size="22">Pre-trained YOLOv8s</text>
+    <text x="672" y="312" fill="#cbd5e1" font-size="19">Weights: models/m2-road-damage.pt</text>
+    <text x="672" y="348" fill="#cbd5e1" font-size="19">Size: 89.6 MB</text>
+    <text x="672" y="384" fill="#cbd5e1" font-size="19">Focus: road-damage reference model</text>
+    <text x="672" y="420" fill="#cbd5e1" font-size="19">Classes: longitudinal, transverse, alligator, potholes</text>
+    <text x="672" y="456" fill="#cbd5e1" font-size="19">Useful for side-by-side evaluation and alternate labeling</text>
+    <rect x="672" y="492" width="280" height="14" rx="7" fill="#1f2937"/>
+    <rect x="672" y="492" width="190" height="14" rx="7" fill="#38bdf8"/>
+    <text x="672" y="530" fill="#93c5fd" font-size="18">Secondary comparison model</text>
+  </g>
+</svg>

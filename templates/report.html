@@ -1,0 +1,112 @@
+{% extends "app_base.html" %}
+{% block title %}Report Road Damage · Safe Street{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Report Road Damage</h1>
+    <p class="subtitle">Upload a photo, confirm the problem, add a location, then submit.</p>
+  </div>
+</div>
+
+{% if not confirm %}
+<form class="card" method="post" action="{{ url_for('report_detect') }}" enctype="multipart/form-data" data-loading>
+  <h2 style="margin-top:0;">Upload Road Image</h2>
+  <div class="form-field">
+    <label for="image">Road photo</label>
+    <input id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.bmp,.webp" {% if not preset.original_rel %}required{% endif %}>
+  </div>
+  <img id="image-preview" class="preview-image" alt="Selected road photo" hidden>
+  <button class="btn btn-primary" type="submit">Analyze Road</button>
+</form>
+
+{% if preset.original_rel %}
+<div class="card">
+  <h2 style="margin-top:0;">Road damage identified</h2>
+  <div class="compare">
+    <img src="{{ url_for('media', filename=preset.original_rel) }}" alt="Original">
+    <img src="{{ url_for('media', filename=preset.result_rel) }}" alt="Identified damage">
+  </div>
+  {% if preset.damage_type and preset.damage_type != 'Undetected' %}
+  <p class="success-line">Road damage detected</p>
+  <p><strong>Type:</strong> {{ preset.damage_type }}</p>
+  <p><strong>Priority:</strong> {{ severity_label(preset.severity) }}</p>
+  {% else %}
+  <p>No clear road damage was identified in this photo. You can still submit a report with a location and description.</p>
+  {% endif %}
+</div>
+
+<form class="card" method="post" action="{{ url_for('report_preview') }}" id="location-form">
+  <h2 style="margin-top:0;">Add Location</h2>
+  <div class="actions">
+    <button class="btn btn-outline" type="button" id="use-geo">Use my current location</button>
+  </div>
+  <p class="hint" id="geo-status">Your location is only used if you choose it here.</p>
+
+  <div class="grid-2">
+    <div class="form-field">
+      <label for="location_name">Location</label>
+      <input id="location_name" name="location_name" value="{{ preset.location_name or '' }}" placeholder="e.g. LB Nagar, Hyderabad">
+    </div>
+    <div class="form-field">
+      <label for="place-search">Search on map</label>
+      <input id="place-search" placeholder="Search a place, then press Enter">
+    </div>
+  </div>
+  <input id="latitude" name="latitude" type="hidden" value="{{ preset.latitude or '' }}">
+  <input id="longitude" name="longitude" type="hidden" value="{{ preset.longitude or '' }}">
+  <div id="picker-map" class="map"></div>
+  <p class="hint">Click the map to choose the exact spot.</p>
+  <div class="form-field" style="margin-top:1rem;">
+    <label for="description">Add Description</label>
+    <textarea id="description" name="description" rows="4" placeholder="Describe the problem, nearby landmark, or how it affects traffic.">{{ preset.description or '' }}</textarea>
+  </div>
+  <div class="card confirm-box">
+    <strong>Selected location</strong>
+    <p id="selected-summary">{{ preset.location_name or 'Not set yet' }}</p>
+  </div>
+  <button class="btn btn-primary" type="submit">Review report</button>
+</form>
+{% endif %}
+<p class="hint">Need to check a video or live camera first? <a href="{{ url_for('detect') }}">Open road inspection</a>.</p>
+{% endif %}
+
+{% if confirm %}
+<div class="card">
+  <h2 style="margin-top:0;">Review your report</h2>
+  <div class="compare">
+    <img src="{{ url_for('media', filename=preset.original_rel) }}" alt="Preview">
+    <img src="{{ url_for('media', filename=preset.result_rel) }}" alt="Identified damage">
+  </div>
+  <p><strong>Type:</strong> {{ preset.damage_type }}</p>
+  <p><strong>Priority:</strong> {{ severity_label(preset.severity) }}</p>
+  <p><strong>Location:</strong> {{ preset.location_name }}</p>
+  <p><strong>Description:</strong> {{ preset.description or '—' }}</p>
+  <form method="post" action="{{ url_for('report_submit') }}" class="actions">
+    <button class="btn btn-primary" type="submit">Submit Report</button>
+    <a class="btn btn-outline" href="{{ url_for('report_damage') }}">Change details</a>
+  </form>
+</div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+<script>
+(function () {
+  const input = document.getElementById("image");
+  const preview = document.getElementById("image-preview");
+  if (!input || !preview) return;
+  input.addEventListener("change", function () {
+    const file = input.files && input.files[0];
+    if (!file) {
+      preview.hidden = true;
+      return;
+    }
+    preview.src = URL.createObjectURL(file);
+    preview.hidden = false;
+  });
+})();
+</script>
+{% endblock %}

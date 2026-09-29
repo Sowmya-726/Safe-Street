@@ -1,0 +1,73 @@
+{% extends "app_base.html" %}
+{% block title %}Safe Street – Report road problems. Help make streets safer.{% endblock %}
+{% block body_class %}landing-page{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <div class="kicker">Community road reporting</div>
+    <h1>Safe Street</h1>
+    <p class="lede">Report road problems. Help make streets safer.</p>
+    <p class="lede">See a pothole, crack, or damaged road? Share it with the community so the issue can get attention.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Report Road Damage</a>
+      <a class="btn btn-outline" href="{{ url_for('damage_map') }}">Explore Map</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <h3>Community snapshot</h3>
+    <p>Anyone can browse reported road problems. Signing in is only needed when you want to submit a new report.</p>
+    <div class="stat-row">
+      <div class="stat"><b>{{ stats.total }}</b><span>Total reports</span></div>
+      <div class="stat"><b>{{ stats.reported_today }}</b><span>Reported today</span></div>
+      <div class="stat"><b>{{ stats.high }}</b><span>High priority</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section action-grid">
+  <article class="card feature-card">
+    <div class="icon-dot">1</div>
+    <h3>Report Road Damage</h3>
+    <p>See a pothole, crack, or damaged road? Report it and help bring attention to the issue.</p>
+    <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Report Road Damage</a>
+  </article>
+  <article class="card feature-card">
+    <div class="icon-dot">2</div>
+    <h3>Explore Reported Roads</h3>
+    <p>See road problems reported by the community.</p>
+    <a class="btn btn-outline" href="{{ url_for('damage_map') }}">Explore Map</a>
+  </article>
+  <article class="card feature-card">
+    <div class="icon-dot">3</div>
+    <h3>Road Damage Dashboard</h3>
+    <p>Explore reported road problems, locations and their current status.</p>
+    <a class="btn btn-outline" href="{{ url_for('dashboard') }}">View Dashboard</a>
+  </article>
+</section>
+
+<section class="section">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step"><b>1. Spot a problem</b>Find a pothole or damaged road.</div>
+    <div class="step"><b>2. Report it</b>Upload a photo and provide the location.</div>
+    <div class="step"><b>3. Track the issue</b>See reported road problems and their status.</div>
+  </div>
+</section>
+
+{% if recent %}
+<section class="section">
+  <div class="topbar">
+    <div>
+      <h2>Recent reports</h2>
+      <p class="muted">The latest road problems shared by the community.</p>
+    </div>
+    <a class="btn btn-outline" href="{{ url_for('explore') }}">See all reports</a>
+  </div>
+  <div class="report-grid">
+    {% for row in recent %}
+      {% include "partials/report_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

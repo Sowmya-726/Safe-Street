@@ -1,0 +1,40 @@
+{% extends "app_base.html" %}
+{% block title %}Road Condition Timeline · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Road Condition Timeline</h1>
+    <p class="subtitle">How community-reported conditions have changed. This is not a road-failure forecast.</p>
+  </div>
+</div>
+<form class="card filter-bar" method="get">
+  <div class="form-field">
+    <label>Area</label>
+    <input name="area" value="{{ area }}" placeholder="Optional area">
+  </div>
+  <button class="btn btn-primary" type="submit">Update</button>
+</form>
+{% if trend.enough %}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Month</th><th>Condition</th><th>New reports</th><th>Resolved</th><th>Health index</th></tr></thead>
+      <tbody>
+        {% for point in trend.points %}
+        <tr>
+          <td>{{ point.label }}</td>
+          <td>{{ point.condition }}</td>
+          <td>{{ point.new_reports }}</td>
+          <td>{{ point.resolved }}</td>
+          <td>{{ point.score if point.score is not none else 'Insufficient data' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="hint">{{ trend.disclaimer }}</p>
+</div>
+{% else %}
+<div class="card empty"><h3>Not enough data available yet.</h3><p>{{ trend.disclaimer }}</p></div>
+{% endif %}
+{% endblock %}

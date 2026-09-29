@@ -1,0 +1,81 @@
+<form class="card filter-bar" method="get">
+  <div class="grid-2">
+    <div class="form-field">
+      <label for="q">Search</label>
+      <input id="q" name="q" value="{{ filters.q }}" placeholder="Address, area, road, or report ID">
+    </div>
+    <div class="form-field">
+      <label for="location">Area</label>
+      <input id="location" name="location" value="{{ filters.location }}" placeholder="Filter by area or road name">
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="form-field">
+      <label>Priority</label>
+      <select name="severity">
+        <option value="">All</option>
+        {% for s in ['high','medium','low'] %}
+        <option value="{{ s }}" {% if filters.severity == s %}selected{% endif %}>{{ severity_label(s) }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Status</label>
+      <select name="status">
+        <option value="">All</option>
+        {% for s, label in [('pending','Submitted'),('under_review','Under Review'),('verified','Verified'),('in_progress','In Progress'),('resolved','Resolved'),('reopened','Reopened')] %}
+        <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Problem type</label>
+      <select name="damage_type">
+        <option value="">All</option>
+        {% for t in types %}
+        <option value="{{ t }}" {% if filters.damage_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="form-field">
+      <label>Resolved</label>
+      <select name="resolved">
+        <option value="">All</option>
+        <option value="no" {% if filters.resolved == 'no' %}selected{% endif %}>Unresolved</option>
+        <option value="yes" {% if filters.resolved == 'yes' %}selected{% endif %}>Resolved</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>From</label>
+      <input type="date" name="date_from" value="{{ filters.date_from }}">
+    </div>
+    <div class="form-field">
+      <label>To</label>
+      <input type="date" name="date_to" value="{{ filters.date_to }}">
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="form-field">
+      <label>Issue group</label>
+      <input name="issue_group" value="{{ filters.issue_group }}" placeholder="Issue group ID">
+    </div>
+    <div class="form-field">
+      <label>Community verification</label>
+      <select name="verification">
+        <option value="">All</option>
+        <option value="confirmed" {% if filters.verification == 'confirmed' %}selected{% endif %}>Still present</option>
+        <option value="fixed" {% if filters.verification == 'fixed' %}selected{% endif %}>Reported as fixed</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Hotspot areas</label>
+      <select name="hotspot">
+        <option value="">All areas</option>
+        <option value="1" {% if filters.hotspot %}selected{% endif %}>Hotspots only</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn btn-primary" type="submit">Apply filters</button>
+</form>

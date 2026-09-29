@@ -1,0 +1,75 @@
+{% extends "app_base.html" %}
+{% block title %}Road Damage Dashboard · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Road Damage Dashboard</h1>
+    <p class="subtitle">Explore reported road problems, locations and their current status.</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Report Road Damage</a>
+</div>
+
+<div class="metric-grid metric-grid-5">
+  <div class="metric"><span>Total Reports</span><strong>{{ stats.total }}</strong></div>
+  <div class="metric"><span>Reported Today</span><strong>{{ stats.reported_today }}</strong></div>
+  <div class="metric"><span>High Priority</span><strong>{{ stats.high }}</strong></div>
+  <div class="metric"><span>Under Review</span><strong>{{ stats.under_review }}</strong></div>
+  <div class="metric"><span>Resolved</span><strong>{{ stats.resolved }}</strong></div>
+</div>
+
+<form class="card filter-bar" method="get">
+  <div class="form-field">
+    <label for="q">Search</label>
+    <input id="q" name="q" value="{{ filters.q }}" placeholder="Location, problem type, or description">
+  </div>
+  <div class="grid-3">
+    <div class="form-field">
+      <label>Priority</label>
+      <select name="severity">
+        <option value="">All</option>
+        {% for s in ['high','medium','low'] %}
+        <option value="{{ s }}" {% if filters.severity == s %}selected{% endif %}>{{ severity_label(s) }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Status</label>
+      <select name="status">
+        <option value="">All</option>
+        <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Submitted</option>
+        <option value="under_review" {% if filters.status == 'under_review' %}selected{% endif %}>Under Review</option>
+        <option value="resolved" {% if filters.status == 'resolved' %}selected{% endif %}>Resolved</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Problem type</label>
+      <select name="damage_type">
+        <option value="">All</option>
+        {% for t in types %}
+        <option value="{{ t }}" {% if filters.damage_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <button class="btn btn-primary" type="submit">Filter reports</button>
+</form>
+
+<div class="topbar" style="margin-top:1.4rem;">
+  <h2 style="margin:0;">Recent Reports</h2>
+  <a class="btn btn-outline" href="{{ url_for('analytics') }}">View statistics</a>
+</div>
+
+{% if recent %}
+<div class="report-grid">
+  {% for row in recent %}
+    {% include "partials/report_card.html" %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="card empty">
+  <h3>No reports yet</h3>
+  <p>When someone submits a road problem, it will appear here for everyone to see.</p>
+  <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Report Road Damage</a>
+</div>
+{% endif %}
+{% endblock %}

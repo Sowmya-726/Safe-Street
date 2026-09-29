@@ -1,0 +1,63 @@
+{% extends "app_base.html" %}
+{% block title %}Admin reports · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">All reports</h1>
+    <p class="subtitle">{{ page.total }} matching reports</p>
+  </div>
+  <a class="btn btn-outline" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+</div>
+{% include "partials/public_filters.html" %}
+<form method="get" class="card" style="margin-bottom:1rem;">
+  <input type="hidden" name="q" value="{{ filters.q }}">
+  <div class="grid-2">
+    <div class="form-field">
+      <label>Sort</label>
+      <select name="sort">
+        <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Date</option>
+        <option value="priority" {% if sort == 'priority' %}selected{% endif %}>Priority</option>
+        <option value="status" {% if sort == 'status' %}selected{% endif %}>Status</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Order</label>
+      <select name="order">
+        <option value="desc" {% if order == 'desc' %}selected{% endif %}>Newest / High first</option>
+        <option value="asc" {% if order == 'asc' %}selected{% endif %}>Oldest / Low first</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn btn-outline" type="submit">Sort</button>
+</form>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Report ID</th><th>Type</th><th>Priority</th><th>Area</th><th>Date</th><th>Status</th><th>Verification</th><th>Group</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in page['items'] %}
+      <tr>
+        <td><a href="{{ url_for('admin_report_detail', report_id=row.public_id) }}">{{ row.public_id }}</a></td>
+        <td>{{ row.damage_type }}</td>
+        <td>{{ row.severity_label }}</td>
+        <td>{{ row.location_name }}</td>
+        <td>{{ row.date_label }}</td>
+        <td><span class="badge badge-{{ row.status }}">{{ row.status_label }}</span></td>
+        <td>{{ row.verification.still_present }} still · {{ row.verification.fixed }} fixed</td>
+        <td>{{ row.issue_group_id or '—' }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8">No reports match these filters.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="actions">
+  {% if page.has_prev %}<a class="btn btn-outline" href="{{ url_for('admin_reports', page=page.page-1, sort=sort, order=order, q=filters.q, status=filters.status, severity=filters.severity) }}">Previous</a>{% endif %}
+  <span class="hint">Page {{ page.page }} of {{ page.pages }}</span>
+  {% if page.has_next %}<a class="btn btn-outline" href="{{ url_for('admin_reports', page=page.page+1, sort=sort, order=order, q=filters.q, status=filters.status, severity=filters.severity) }}">Next</a>{% endif %}
+</div>
+{% endblock %}

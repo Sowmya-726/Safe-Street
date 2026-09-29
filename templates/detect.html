@@ -1,0 +1,86 @@
+{% extends "app_base.html" %}
+{% block title %}Inspect a road · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Inspect a road</h1>
+    <p class="subtitle">Upload a photo, a short video, or use your camera. Then continue to submit a public report.</p>
+  </div>
+</div>
+<div class="tabs">
+  <a class="tab {% if mode == 'image' %}active{% endif %}" href="{{ url_for('detect') }}">Photo</a>
+  <a class="tab {% if mode == 'video' %}active{% endif %}" href="{{ url_for('detect') }}?mode=video" id="tab-video">Video</a>
+  <a class="tab {% if mode == 'live' %}active{% endif %}" href="{{ url_for('detect_live') }}">Live camera</a>
+</div>
+
+{% if mode != 'live' and mode != 'video' %}
+<form class="card" method="post" action="{{ url_for('detect_image') }}" enctype="multipart/form-data" data-loading>
+  <h2 style="margin-top:0;">Upload Road Image</h2>
+  <div class="form-field">
+    <label for="image">Road photo</label>
+    <input id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.bmp,.webp" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Analyze Road</button>
+</form>
+{% endif %}
+
+{% if mode == 'video' or request.args.get('mode') == 'video' %}
+<form class="card" method="post" action="{{ url_for('detect_video') }}" enctype="multipart/form-data" data-loading>
+  <h2 style="margin-top:0;">Upload a video</h2>
+  <p class="muted">We’ll review the clip and highlight visible road problems.</p>
+  <div class="form-field">
+    <label for="video">Road video</label>
+    <input id="video" name="video" type="file" accept=".mp4,.avi,.mov,.mkv" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Analyze video</button>
+</form>
+{% endif %}
+
+{% if video_rel %}
+<div class="card">
+  <h2 style="margin-top:0;">Reviewed video</h2>
+  <video controls src="{{ url_for('media', filename=video_rel) }}"></video>
+</div>
+{% endif %}
+
+{% if mode == 'live' %}
+<div class="card">
+  <h2 style="margin-top:0;">Live camera</h2>
+  <p class="muted">Camera access is requested only when you click Start. Use Detect current frame to review what the camera sees.</p>
+  <div class="actions">
+    <button class="btn btn-primary" type="button" id="cam-start">Start camera</button>
+    <button class="btn btn-outline" type="button" id="cam-stop">Stop</button>
+    <button class="btn btn-outline" type="button" id="cam-detect">Detect current frame</button>
+  </div>
+  <p class="hint" id="live-status">Location is not collected from the camera.</p>
+  <div class="live-box">
+    <video id="cam-video" autoplay playsinline></video>
+    <img id="cam-result" alt="Reviewed frame">
+  </div>
+</div>
+{% endif %}
+
+{% if result %}
+<div class="card">
+  <h2 style="margin-top:0;">Road damage identified</h2>
+  <div class="compare">
+    <div>
+      <p class="muted">Your photo</p>
+      <img src="{{ url_for('media', filename=result.original_rel) }}" alt="Original">
+    </div>
+    <div>
+      <p class="muted">Identified damage</p>
+      <img src="{{ url_for('media', filename=result.result_rel) }}" alt="Detected">
+    </div>
+  </div>
+  <p><strong>Type:</strong> {{ result.summary.primary_damage_type or 'None clearly identified' }}</p>
+  <p><strong>Priority:</strong> {{ severity_label(result.severity.level) }}</p>
+  <div class="actions" style="margin-top:1rem;">
+    <a class="btn btn-primary" href="{{ url_for('report_damage') }}">Continue to report</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/live.js') }}"></script>
+{% endblock %}

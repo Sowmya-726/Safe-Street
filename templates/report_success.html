@@ -1,0 +1,14 @@
+{% extends "app_base.html" %}
+{% block title %}Report submitted · Safe Street{% endblock %}
+{% block content %}
+<div class="card">
+  <h1 class="page-title">Your report has been submitted successfully.</h1>
+  <p>The community can now see this road problem on the public dashboard and map.</p>
+  <p><strong>{{ report.damage_type }}</strong> · {{ report.location_name }} · {{ report.status_label }}</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="{{ url_for('report_detail', report_id=report.public_id) }}">View report</a>
+    <a class="btn btn-outline" href="{{ url_for('dashboard') }}">Public dashboard</a>
+    <a class="btn btn-outline" href="{{ url_for('my_reports') }}">My Reports</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Safe Street{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="civic-body {% block body_class %}{% endblock %}">
+<header class="civic-header">
+  <a class="brand" href="{{ url_for('landing') }}">
+    <span class="brand-mark">SS</span>
+    <span>
+      <strong>SAFE STREET</strong>
+      <small>Safer roads together</small>
+    </span>
+  </a>
+  <button class="nav-toggle" type="button" id="nav-toggle" aria-label="Open menu">Menu</button>
+  <nav class="civic-nav" id="sidebar">
+    {% for item in nav_items %}
+      <a href="{{ url_for(item.endpoint) }}" class="{% if request.endpoint in item.match %}active{% endif %}{% if item.endpoint == 'report_damage' %} nav-cta{% endif %}{% if item.endpoint in ('login','register','logout') %} nav-auth{% endif %}">{{ item.label }}</a>
+    {% endfor %}
+  </nav>
+</header>
+
+<main class="civic-main">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  Safe Street · Report road problems and help make streets safer.
+</footer>
+<div class="loading-overlay" id="loading-overlay" hidden>
+  <div class="loading-card">Working… this can take a moment.</div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

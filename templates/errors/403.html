@@ -1,0 +1,9 @@
+{% extends "app_base.html" %}
+{% block title %}Not allowed · Safe Street{% endblock %}
+{% block content %}
+<div class="card empty">
+  <h1>You do not have access to this page</h1>
+  <p>Administrator tools are limited to authorized staff.</p>
+  <a class="btn btn-primary" href="{{ url_for('landing') }}">Back to Home</a>
+</div>
+{% endblock %}

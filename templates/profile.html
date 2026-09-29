@@ -1,0 +1,46 @@
+{% extends "app_base.html" %}
+{% block title %}Profile · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Profile</h1>
+    <p class="subtitle">Your Safe Street account</p>
+  </div>
+</div>
+<div class="grid-2">
+  <div class="card">
+    <p><strong>Name:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Member since:</strong> {{ (user.created_at or '')[:10] }}</p>
+    <p><strong>Your reports:</strong> {{ stats.total }}</p>
+    <p><strong>Resolved:</strong> {{ stats.resolved }}</p>
+    <a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+  <div>
+    <form class="card" method="post" action="{{ url_for('profile_edit') }}">
+      <h2 style="margin-top:0;">Edit profile</h2>
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input id="name" name="name" value="{{ user.name }}" required>
+      </div>
+      <button class="btn btn-primary" type="submit">Save name</button>
+    </form>
+    <form class="card" method="post" action="{{ url_for('profile_password') }}" style="margin-top:1rem;">
+      <h2 style="margin-top:0;">Change password</h2>
+      <div class="form-field">
+        <label>Current password</label>
+        <input name="current_password" type="password" required>
+      </div>
+      <div class="form-field">
+        <label>New password</label>
+        <input name="new_password" type="password" required minlength="8">
+      </div>
+      <div class="form-field">
+        <label>Confirm new password</label>
+        <input name="confirm_password" type="password" required>
+      </div>
+      <button class="btn btn-primary" type="submit">Change password</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

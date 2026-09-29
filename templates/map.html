@@ -1,0 +1,39 @@
+{% extends "app_base.html" %}
+{% block title %}Road Damage Map · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Road Damage Map</h1>
+    <p class="subtitle">Click a marker to see the report. {{ reports|length }} of {{ all_count }} reports include a map location.</p>
+  </div>
+</div>
+<div class="card">
+  <div class="grid-3">
+    <select id="filter-severity">
+      <option value="">All priorities</option>
+      <option value="high">High Priority</option>
+      <option value="medium">Medium Priority</option>
+      <option value="low">Low Priority</option>
+    </select>
+    <input id="filter-damage" placeholder="Filter by problem type">
+    <select id="filter-status">
+      <option value="">All statuses</option>
+      <option value="pending">Submitted</option>
+      <option value="under_review">Under Review</option>
+      <option value="resolved">Resolved</option>
+    </select>
+  </div>
+  <div class="form-field" style="margin-top:1rem;">
+    <label for="map-search">Search locations</label>
+    <input id="map-search" placeholder="Search a place, then press Enter">
+    <p class="hint" id="map-search-status">Zoom, pan, and click markers to open a report.</p>
+  </div>
+  <div id="reports-map" class="map" style="margin-top:1rem;height:520px;"></div>
+</div>
+<script>
+  window.SAFE_STREET_REPORTS = {{ reports|tojson }};
+</script>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

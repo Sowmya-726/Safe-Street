@@ -1,0 +1,20 @@
+{% extends "app_base.html" %}
+{% block title %}Most improved areas · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Most improved roads / areas</h1>
+    <p class="subtitle">Shown only when enough historical community data exists. Not an official ranking.</p>
+  </div>
+</div>
+{% if result.enough %}
+<div class="card">
+  {% for row in result.areas %}
+  <p><strong>{{ row.area }}</strong><br>Health Index: {{ row.from }} → {{ row.to }}</p>
+  {% endfor %}
+  <p class="hint">{{ result.disclaimer }}</p>
+</div>
+{% else %}
+<div class="card empty"><h3>Not enough data available yet.</h3><p>{{ result.disclaimer }}</p></div>
+{% endif %}
+{% endblock %}

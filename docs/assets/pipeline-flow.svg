@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Inference Pipeline</title>
+  <desc id="desc">Pipeline showing upload, model inference, annotation, report generation, and downloadable outputs.</desc>
+  <rect width="1200" height="520" rx="28" fill="#f8fafc"/>
+  <text x="60" y="84" fill="#0f172a" font-size="34" font-family="Segoe UI, Arial, sans-serif">Inference Pipeline</text>
+  <text x="60" y="118" fill="#475569" font-size="18" font-family="Segoe UI, Arial, sans-serif">From raw road media to annotated evidence and downloadable results</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    <rect x="64" y="182" width="180" height="180" rx="24" fill="#e0f2fe" stroke="#38bdf8" stroke-width="3"/>
+    <text x="104" y="248" fill="#0f172a">1. Input</text>
+    <text x="89" y="286" fill="#334155">Image</text>
+    <text x="89" y="316" fill="#334155">Video</text>
+    <text x="89" y="346" fill="#334155">Live camera</text>
+    <rect x="300" y="182" width="180" height="180" rx="24" fill="#ecfccb" stroke="#84cc16" stroke-width="3"/>
+    <text x="330" y="248" fill="#0f172a">2. Select</text>
+    <text x="335" y="286" fill="#334155">M1 custom</text>
+    <text x="335" y="316" fill="#334155">M2 pre-trained</text>
+    <text x="335" y="346" fill="#334155">Confidence rules</text>
+    <rect x="536" y="182" width="180" height="180" rx="24" fill="#ede9fe" stroke="#8b5cf6" stroke-width="3"/>
+    <text x="569" y="248" fill="#0f172a">3. Infer</text>
+    <text x="562" y="286" fill="#334155">YOLO detect</text>
+    <text x="562" y="316" fill="#334155">Defects and context</text>
+    <text x="562" y="346" fill="#334155">Per-frame analysis</text>
+    <rect x="772" y="182" width="180" height="180" rx="24" fill="#fee2e2" stroke="#ef4444" stroke-width="3"/>
+    <text x="798" y="248" fill="#0f172a">4. Review</text>
+    <text x="805" y="286" fill="#334155">Boxes</text>
+    <text x="805" y="316" fill="#334155">Labels</text>
+    <text x="805" y="346" fill="#334155">Summary tables</text>
+    <rect x="1008" y="182" width="128" height="180" rx="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+    <text x="1032" y="248" fill="#0f172a">5. Export</text>
+    <text x="1030" y="286" fill="#334155">Media</text>
+    <text x="1030" y="316" fill="#334155">PDF</text>
+    <text x="1030" y="346" fill="#334155">Samples</text>
+  </g>
+  <g stroke="#64748b" stroke-width="5" stroke-linecap="round">
+    <line x1="244" y1="272" x2="300" y2="272"/>
+    <line x1="480" y1="272" x2="536" y2="272"/>
+    <line x1="716" y1="272" x2="772" y2="272"/>
+    <line x1="952" y1="272" x2="1008" y2="272"/>
+  </g>
+</svg>

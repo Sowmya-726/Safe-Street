@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Repository Layout</title>
+  <desc id="desc">Visual map of the repository folders and their purpose.</desc>
+  <rect width="1200" height="620" rx="28" fill="#f8fafc"/>
+  <text x="60" y="88" fill="#0f172a" font-size="34" font-family="Segoe UI, Arial, sans-serif">Repository Layout</text>
+  <text x="60" y="124" fill="#475569" font-size="18" font-family="Segoe UI, Arial, sans-serif">The project is organized for direct local use and straightforward handoff</text>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="22">
+    <rect x="70" y="170" width="1060" height="390" rx="24" fill="#0f172a"/>
+    <text x="110" y="226" fill="#93c5fd">road-anomaly-detection/</text>
+    <text x="150" y="274" fill="#e2e8f0">main.py                 Streamlit application entrypoint</text>
+    <text x="150" y="318" fill="#e2e8f0">models/                 Packaged YOLO weight files</text>
+    <text x="150" y="362" fill="#e2e8f0">scripts/                Utility scripts for inference and dataset review</text>
+    <text x="150" y="406" fill="#e2e8f0">docs/                   Setup notes and supplementary documentation</text>
+    <text x="150" y="450" fill="#e2e8f0">archive/                Historical outputs, evaluation artifacts, sample media</text>
+    <text x="150" y="494" fill="#e2e8f0">requirements.txt        Python dependencies</text>
+    <text x="150" y="538" fill="#e2e8f0">LICENSE                 MIT license for reuse and distribution</text>
+  </g>
+</svg>

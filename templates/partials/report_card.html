@@ -1,0 +1,19 @@
+<article class="report-card">
+  <a class="report-card-media" href="{{ url_for('report_detail', report_id=row.public_id) }}">
+    {% if row.image %}
+    <img src="{{ url_for('media', filename=row.image) }}" alt="{{ row.damage_type }}">
+    {% else %}
+    <div class="report-card-placeholder">No photo</div>
+    {% endif %}
+  </a>
+  <div class="report-card-body">
+    <div class="report-card-tags">
+      <span class="badge badge-{{ row.severity or 'pending' }}">{{ row.severity_label }}</span>
+      <span class="badge badge-{{ row.status }}">{{ row.status_label }}</span>
+    </div>
+    <h3>{{ row.damage_type }}</h3>
+    <p class="muted">{{ row.location_name }}</p>
+    <p class="hint">Reported: {{ row.date_label or '—' }}</p>
+    <a href="{{ url_for('report_detail', report_id=row.public_id) }}">View report</a>
+  </div>
+</article>

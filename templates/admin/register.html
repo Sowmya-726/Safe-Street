@@ -1,0 +1,36 @@
+{% extends "app_base.html" %}
+{% block title %}Admin Register · Safe Street{% endblock %}
+{% block content %}
+<div class="auth-wrap auth-inline">
+  <div class="card auth-card">
+    <div class="kicker">SAFE STREET ADMIN</div>
+    <h1>Admin Register</h1>
+    <p class="muted">Create an administrator account. Community members should use Create account instead.</p>
+    <form method="post" action="{{ url_for('admin_register_post') }}">
+      <div class="form-field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" required value="{{ name or '' }}">
+      </div>
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required value="{{ email or '' }}">
+      </div>
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required minlength="8">
+        <span class="hint">At least 8 characters.</span>
+      </div>
+      <div class="form-field">
+        <label for="confirm_password">Confirm password</label>
+        <input id="confirm_password" name="confirm_password" type="password" required>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Create administrator account</button>
+    </form>
+    <p class="hint" style="margin-top:1rem;">
+      <a href="{{ url_for('admin_login') }}">Administrator sign-in</a>
+      ·
+      <a href="{{ url_for('register') }}">Create account</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

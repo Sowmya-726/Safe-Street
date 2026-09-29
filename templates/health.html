@@ -1,0 +1,48 @@
+{% extends "app_base.html" %}
+{% block title %}Road Health · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Safe Street Road Health Index</h1>
+    <p class="subtitle">Community-based road condition indicator. Not an official government rating.</p>
+  </div>
+</div>
+<form class="card filter-bar" method="get">
+  <div class="form-field">
+    <label for="area">Area</label>
+    <input id="area" name="area" value="{{ area }}" placeholder="Optional area name">
+  </div>
+  <button class="btn btn-primary" type="submit">Update</button>
+</form>
+<div class="card health-hero">
+  {% if health.enough %}
+  <p class="kicker">Road Health</p>
+  <p class="health-score">{{ health.label }}</p>
+  <p>Condition: <strong>{{ health.condition }}</strong> · Based on {{ count }} reports</p>
+  {% else %}
+  <h2>Insufficient data</h2>
+  <p>Not enough data available yet{% if area %} for this area{% endif %}.</p>
+  {% endif %}
+  <p class="hint">{{ health.disclaimer }}</p>
+</div>
+{% if areas %}
+<div class="card">
+  <h2 style="margin-top:0;">By area</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Area</th><th>Index</th><th>Condition</th><th>Reports</th></tr></thead>
+      <tbody>
+        {% for row in areas %}
+        <tr>
+          <td>{{ row.area }}</td>
+          <td>{% if row.enough %}{{ row.label }}{% else %}Insufficient data{% endif %}</td>
+          <td>{{ row.condition }}</td>
+          <td>{{ row.reports }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

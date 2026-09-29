@@ -1,0 +1,46 @@
+{% extends "app_base.html" %}
+{% block title %}Admin analytics · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Administrator analytics</h1>
+    <p class="subtitle">All figures come from stored reports. Nothing is estimated or invented.</p>
+  </div>
+</div>
+{% include "partials/public_filters.html" %}
+<div class="metric-grid metric-grid-5">
+  <div class="metric"><span>Total</span><strong>{{ stats.total }}</strong></div>
+  <div class="metric"><span>Pending</span><strong>{{ stats.pending }}</strong></div>
+  <div class="metric"><span>Under review</span><strong>{{ stats.review_only }}</strong></div>
+  <div class="metric"><span>Verified</span><strong>{{ stats.verified }}</strong></div>
+  <div class="metric"><span>High priority</span><strong>{{ stats.high }}</strong></div>
+</div>
+<div class="metric-grid" style="grid-template-columns:repeat(2,1fr);">
+  <div class="metric"><span>Issue groups</span><strong>{{ stats.groups }}</strong></div>
+  <div class="metric"><span>Community votes</span><strong>{{ stats.community_votes }}</strong></div>
+</div>
+<div class="grid-2">
+  <div class="card">
+    <h2 style="margin-top:0;">By damage type</h2>
+    {% for name, count in stats.types.items() %}
+    <p>{{ name }} · {{ count }}</p>
+    {% else %}
+    <p class="muted">Not enough data available yet.</p>
+    {% endfor %}
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0;">By area</h2>
+    {% for name, count in stats.areas.items() %}
+    <p>{{ name }} · {{ count }}</p>
+    {% else %}
+    <p class="muted">Not enough data available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+<div class="card">
+  <h2 style="margin-top:0;">Community verification</h2>
+  <p>Still present: {{ stats.verification_still }} · Reported fixed: {{ stats.verification_fixed }}</p>
+  <p>Hotspots in this filter: {{ spots|length }}</p>
+  <p class="hint">{% if health.enough %}Road Health {{ health.label }} ({{ health.condition }}){% else %}Insufficient data for a health index.{% endif %}</p>
+</div>
+{% endblock %}

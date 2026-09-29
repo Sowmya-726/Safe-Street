@@ -1,0 +1,89 @@
+{% extends "app_base.html" %}
+{% block title %}Nearby road problems · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Nearby road problems</h1>
+    <p class="subtitle">Your exact location stays in your browser. Only nearby public reports are shown.</p>
+  </div>
+</div>
+<div class="card">
+  <div class="actions">
+    <button class="btn btn-primary" type="button" id="nearby-geo">Use my current location</button>
+  </div>
+  <p class="hint" id="nearby-status">Permission is required to search around you.</p>
+  <form class="filter-bar" method="get" id="nearby-form">
+    <input type="hidden" name="lat" id="lat" value="{{ filters.lat }}">
+    <input type="hidden" name="lng" id="lng" value="{{ filters.lng }}">
+    <div class="grid-3">
+      <div class="form-field">
+        <label>Distance</label>
+        <select name="radius">
+          <option value="1">1 km</option>
+          <option value="2.5" selected>2.5 km</option>
+          <option value="5">5 km</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Priority</label>
+        <select name="severity">
+          <option value="">All</option>
+          <option value="high" {% if filters.severity == 'high' %}selected{% endif %}>High</option>
+          <option value="medium" {% if filters.severity == 'medium' %}selected{% endif %}>Medium</option>
+          <option value="low" {% if filters.severity == 'low' %}selected{% endif %}>Low</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Status</label>
+        <select name="status">
+          <option value="">All</option>
+          <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Submitted</option>
+          <option value="resolved" {% if filters.status == 'resolved' %}selected{% endif %}>Resolved</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Problem type</label>
+      <select name="damage_type">
+        <option value="">All</option>
+        {% for t in types %}
+        <option value="{{ t }}" {% if filters.damage_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-outline" type="submit">Filter</button>
+  </form>
+</div>
+{% if reports %}
+<div class="card">
+  {% for row in reports %}
+  <p><a href="{{ url_for('report_detail', report_id=row.public_id) }}"><strong>{{ row.damage_type }}</strong></a> — {{ row.severity_label }} — {{ row.distance_label }} · {{ row.status_label }}</p>
+  {% endfor %}
+</div>
+{% elif has_origin %}
+<div class="card empty"><h3>No matching reports nearby</h3></div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script>
+(function () {
+  const btn = document.getElementById("nearby-geo");
+  const status = document.getElementById("nearby-status");
+  if (!btn) return;
+  btn.addEventListener("click", function () {
+    if (!navigator.geolocation) {
+      status.textContent = "Location is not available in this browser.";
+      return;
+    }
+    status.textContent = "Finding nearby reports…";
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      document.getElementById("lat").value = pos.coords.latitude.toFixed(5);
+      document.getElementById("lng").value = pos.coords.longitude.toFixed(5);
+      document.getElementById("nearby-form").submit();
+    }, function () {
+      status.textContent = "Location permission was not granted.";
+    });
+  });
+})();
+</script>
+{% endblock %}

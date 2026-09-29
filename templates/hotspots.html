@@ -1,0 +1,50 @@
+{% extends "app_base.html" %}
+{% block title %}Damage hotspots · Safe Street{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Damage hotspots</h1>
+    <p class="subtitle">Concentrated road problems from actual report locations.</p>
+  </div>
+  <a class="btn btn-outline" href="{{ url_for('damage_map') }}">Open full map</a>
+</div>
+{% if enough %}
+<div class="card">
+  <div id="reports-map" class="map" style="height:480px;"></div>
+</div>
+<div class="table-wrap" style="margin-top:1rem;">
+  <table>
+    <thead><tr><th>Area</th><th>Reports</th><th>Active</th><th>High priority</th></tr></thead>
+    <tbody>
+      {% for row in hotspots %}
+      <tr>
+        <td>{{ row.area }}</td>
+        <td>{{ row.count }}</td>
+        <td>{{ row.active }}</td>
+        <td>{{ row.high }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  window.SAFE_STREET_REPORTS = {{ reports|tojson }};
+  window.SAFE_STREET_HOTSPOTS = {{ hotspots|tojson }};
+</script>
+{% else %}
+<div class="card empty">
+  <h3>Not enough data available yet.</h3>
+  <p>Hotspots appear when multiple reports cluster in the same area.</p>
+</div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

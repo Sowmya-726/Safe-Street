@@ -1,0 +1,88 @@
+{% extends "app_base.html" %}
+{% block title %}{{ report.public_id }} · Admin{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">{{ report.public_id }} · {{ report.damage_type }}</h1>
+    <p class="subtitle">{{ report.location_name }} · {{ report.date_label }}</p>
+  </div>
+  <span class="badge badge-{{ report.status }}">{{ report.status_label }}</span>
+</div>
+<div class="compare">
+  {% if report.image %}
+  <div class="card"><p class="muted">Before</p><img src="{{ url_for('media', filename=report.image) }}" alt="Before"></div>
+  {% endif %}
+  {% if report.resolution and report.resolution.after_image %}
+  <div class="card"><p class="muted">After</p><img src="{{ url_for('media', filename=report.resolution.after_image) }}" alt="After repair"></div>
+  {% elif report.result_image %}
+  <div class="card"><p class="muted">Identified damage</p><img src="{{ url_for('media', filename=report.result_image) }}" alt="Identified"></div>
+  {% endif %}
+</div>
+<div class="card" style="margin-top:1rem;">
+  <p><strong>Priority:</strong> {{ report.severity_label }}</p>
+  <p><strong>Issue group:</strong> {{ report.issue_group_id or '—' }}</p>
+  <p><strong>Related reports:</strong> {{ report.related_report_ids|join(', ') or 'None' }}</p>
+  <p><strong>Community verification:</strong> {{ report.verification.still_present }} still present · {{ report.verification.fixed }} fixed · {{ report.verification.not_sure }} not sure</p>
+  <p><strong>Description:</strong> {{ report.description or '—' }}</p>
+</div>
+{% if next_statuses and 'resolved' not in next_statuses %}
+<form class="card" method="post" action="{{ url_for('admin_report_status', report_id=report.public_id) }}">
+  <h2 style="margin-top:0;">Update official status</h2>
+  <div class="form-field">
+    <label>Next status</label>
+    <select name="status" required>
+      {% for s in next_statuses %}
+      <option value="{{ s }}">{{ status_label(s) }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-field">
+    <label>Reason / notes</label>
+    <textarea name="reason" rows="3" required></textarea>
+  </div>
+  <button class="btn btn-primary" type="submit">Save status</button>
+</form>
+{% endif %}
+{% if report.status == 'in_progress' %}
+<form class="card" method="post" action="{{ url_for('admin_report_resolve', report_id=report.public_id) }}" enctype="multipart/form-data">
+  <h2 style="margin-top:0;">Confirm resolution</h2>
+  <p>Current status: In Progress</p>
+  <div class="form-field">
+    <label>Resolution description</label>
+    <textarea name="description" rows="4" required></textarea>
+  </div>
+  <div class="form-field">
+    <label>After-repair image</label>
+    <input type="file" name="after_image" accept=".jpg,.jpeg,.png,.bmp,.webp" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Confirm Resolution</button>
+</form>
+{% endif %}
+{% if report.status == 'resolved' %}
+<form class="card" method="post" action="{{ url_for('admin_report_reopen', report_id=report.public_id) }}">
+  <h2 style="margin-top:0;">Reopen issue</h2>
+  <p>Community verification can inform this decision. Reopening is an administrator action only.</p>
+  <div class="form-field">
+    <label>Reason</label>
+    <textarea name="reason" rows="3" required></textarea>
+  </div>
+  <button class="btn btn-outline" type="submit">Reopen Issue</button>
+</form>
+{% endif %}
+<div class="card">
+  <h2 style="margin-top:0;">Status history</h2>
+  {% for item in report.status_history %}
+  <p>{{ status_label(item.status) }} · {{ item.changed_at[:16] if item.changed_at else '' }} · {{ item.reason }}</p>
+  {% else %}
+  <p class="muted">No history yet.</p>
+  {% endfor %}
+</div>
+{% if group %}
+<div class="card">
+  <h2 style="margin-top:0;">Grouped reports</h2>
+  {% for row in group %}
+  <p><a href="{{ url_for('admin_report_detail', report_id=row.public_id) }}">{{ row.public_id }}</a> · {{ row.damage_type }} · {{ row.status_label }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

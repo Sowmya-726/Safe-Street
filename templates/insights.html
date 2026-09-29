@@ -1,0 +1,43 @@
+{% extends "app_base.html" %}
+{% block title %}Community insights · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Community insights</h1>
+    <p class="subtitle">Road condition indicators from community reports. These are not official government ratings.</p>
+  </div>
+</div>
+<div class="metric-grid metric-grid-5">
+  <div class="metric"><span>Reports</span><strong>{{ stats.total }}</strong></div>
+  <div class="metric"><span>Road Health</span><strong>{% if health.enough %}{{ health.label }}{% else %}—{% endif %}</strong></div>
+  <div class="metric"><span>Hotspots</span><strong>{{ hotspot_count }}</strong></div>
+  <div class="metric"><span>Resolved</span><strong>{{ stats.resolved }}</strong></div>
+</div>
+<div class="action-grid">
+  <article class="card feature-card">
+    <h3>Safe Street Road Health Index</h3>
+    <p>A community-based condition indicator from active issues, severity, and verification.</p>
+    <a class="btn btn-outline" href="{{ url_for('road_health') }}">View road health</a>
+  </article>
+  <article class="card feature-card">
+    <h3>Damage hotspots</h3>
+    <p>Areas with concentrated unresolved road problems.</p>
+    <a class="btn btn-outline" href="{{ url_for('damage_hotspots') }}">View hotspots</a>
+  </article>
+  <article class="card feature-card">
+    <h3>Road Condition Timeline</h3>
+    <p>How reported conditions have changed over time.</p>
+    <a class="btn btn-outline" href="{{ url_for('road_trends') }}">View trend</a>
+  </article>
+  <article class="card feature-card">
+    <h3>Nearby problems</h3>
+    <p>Find reported issues near your current location after you grant permission.</p>
+    <a class="btn btn-outline" href="{{ url_for('nearby') }}">Find nearby</a>
+  </article>
+  <article class="card feature-card">
+    <h3>Area comparison</h3>
+    <p>Compare two areas using real Safe Street reports.</p>
+    <a class="btn btn-outline" href="{{ url_for('compare') }}">Compare areas</a>
+  </article>
+</div>
+{% endblock %}

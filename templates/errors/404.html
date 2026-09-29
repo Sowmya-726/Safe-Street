@@ -1,0 +1,9 @@
+{% extends "app_base.html" %}
+{% block title %}Not found · Safe Street{% endblock %}
+{% block content %}
+<div class="card empty">
+  <h1>Page not found</h1>
+  <p class="muted">The page you requested is not available.</p>
+  <a class="btn btn-primary" href="{{ url_for('landing') }}">Back to Safe Street</a>
+</div>
+{% endblock %}

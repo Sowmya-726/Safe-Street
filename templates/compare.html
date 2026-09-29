@@ -1,0 +1,48 @@
+{% extends "app_base.html" %}
+{% block title %}Area comparison · Safe Street{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1 class="page-title">Area comparison</h1>
+    <p class="subtitle">Compare two areas using real Safe Street reports.</p>
+  </div>
+</div>
+<form class="card filter-bar" method="get">
+  <div class="grid-2">
+    <div class="form-field">
+      <label>Area A</label>
+      <input name="area_a" list="areas" value="{{ area_a }}" required>
+    </div>
+    <div class="form-field">
+      <label>Area B</label>
+      <input name="area_b" list="areas" value="{{ area_b }}" required>
+    </div>
+  </div>
+  <datalist id="areas">
+    {% for name in names %}<option value="{{ name }}">{% endfor %}
+  </datalist>
+  <button class="btn btn-primary" type="submit">Compare</button>
+</form>
+{% if result %}
+  {% if result.enough %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>{{ result.area_a }}</th><th>{{ result.area_b }}</th></tr></thead>
+      <tbody>
+        <tr><td>Reports</td><td>{{ result.left.reports }}</td><td>{{ result.right.reports }}</td></tr>
+        <tr><td>Active</td><td>{{ result.left.active }}</td><td>{{ result.right.active }}</td></tr>
+        <tr><td>Resolved</td><td>{{ result.left.resolved }}</td><td>{{ result.right.resolved }}</td></tr>
+        <tr><td>High priority</td><td>{{ result.left.high }}</td><td>{{ result.right.high }}</td></tr>
+        <tr><td>Recent (30 days)</td><td>{{ result.left.recent }}</td><td>{{ result.right.recent }}</td></tr>
+        <tr><td>Health index</td>
+          <td>{% if result.left.health.enough %}{{ result.left.health.label }}{% else %}Insufficient data{% endif %}</td>
+          <td>{% if result.right.health.enough %}{{ result.right.health.label }}{% else %}Insufficient data{% endif %}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card empty"><h3>Not enough data available yet.</h3></div>
+  {% endif %}
+{% endif %}
+{% endblock %}
